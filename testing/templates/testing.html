@@ -1,0 +1,11 @@
+<h1>${display_name}</h1>
+
+<div class="xblock-question" id="content-main">${question_text}</div>
+<ul>
+%for name in range(0,count):
+    <p>${content[name]}</p>
+    <textarea class="answer editable" cols="66" rows="22" name=${content[name]}>${box_text}</textarea>
+%endfor
+</ul>
+<button id='submit'>Submit</button>
+</object>
