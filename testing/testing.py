@@ -107,25 +107,32 @@ class TestingXBlock(XBlock):
         frag.add_javascript(self.resource_string("static/js/src/testing.js"))
         frag.initialize_js('TestingXBlock')
         return frag
-    # # shown to staffs when edit courses
-    # def studio_view(self,context= None):
-    #     html = self.resource_string("static/html/testing_edit.html")
-    #     frag = Fragment(html.format(self=self))
-    #     frag.add_css(self.resource_string("static/css/testing.css"))
-    #     frag.add_javascript(self.resource_string("static/js/src/testing.js"))
-    #     frag.initialize_js('TestingXBlock')
-    #     return frag
-    #
+
+    # shown to staffs when edit courses
+    def studio_view(self,context):
+        """
+        Create a fragment used to display the edit view in the Studio.
+        """
+        context = {
+            "href": self.href,
+            "display_name": self.display_name
+        }
+        frag = Fragment(self.render_template("testing_edit.html",context))
+        frag.add_javascript(self.resource_string("static/js/src/testing_edit.js"))
+        frag.initialize_js('TestingXBlockEdit')
+        return frag
+
     @XBlock.json_handler
-    def save_code(self, data, suffix=''):
+    def studio_submit(self, data, suffix=''):
         """
         An example handler, which increments the data.
         """
         self.href = data['href']
         self.display_name = data['display_name']
-        content = requests.get(self.href).content
-        b = BeautifulSoup(content, "html.parser")
-        self.content = str(b.find_all('form')[0]).replace('/codecheck/check','http://codecheck.it/codecheck/check')
+        #content = requests.get(self.href).content
+        #b = BeautifulSoup(content, "html.parser")
+        #self.content = str(b.find_all('form')[0]).replace('/codecheck/check','http://codecheck.it/codecheck/check')
+        #self.content = data['content']
         return {
             'result': 'success',
         }
