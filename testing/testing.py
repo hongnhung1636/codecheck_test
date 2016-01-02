@@ -16,17 +16,16 @@ class TestingXBlock(XBlock):
     """
 
     #default url
-    url = 'http://codecheck.it/codecheck/files?repo=bj4cc&problem=ch02/c02_exp_2_102'
-    r1 = urllib2.urlopen(url)
-    b1 = BeautifulSoup(r1, "html.parser")
-    # get all content for the website
-    #answer_form = b1.prettify()
-    #answer_form = answer_form.replace('/codecheck/check','http://codecheck.it/codecheck/check')
-
     href = String(display_name="href",
                   default="http://codecheck.it/codecheck/files?repo=bj4fp&problem=ch04/c04_exp_4_7",
                   scope=Scope.content,
                   help="website that will be shown in the XBlock")
+
+    r1 = urllib2.urlopen(href._default)
+    b1 = BeautifulSoup(r1, "html.parser")
+    # get all content for the website
+    #answer_form = b1.prettify()
+    #answer_form = answer_form.replace('/codecheck/check','http://codecheck.it/codecheck/check')
 
     display_name = String(display_name="Display Name",
                           default="Codecheck Problem",
@@ -107,6 +106,13 @@ class TestingXBlock(XBlock):
         frag.add_javascript(self.resource_string("static/js/src/testing.js"))
         frag.initialize_js('TestingXBlock')
         return frag
+
+    def student_submit(self, data,suffix=''):
+        """
+        button submit student code to codecheck
+        """
+
+
 
     # shown to staffs when edit courses
     def studio_view(self,context):

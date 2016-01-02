@@ -16,18 +16,44 @@ r = urllib2.urlopen(url= "http://codecheck.it/codecheck/files?repo=bj4fp&problem
 #r = urllib2.urlopen(url='http://codecheck.it/codecheck/files?repo=bj4fp&problem=ch04/c04_exp_4_7').read()
 # get the website source
 b = BeautifulSoup(r, "html.parser")
+url = 'http://codecheck.it/codecheck/files?repo=bj4cc&problem=ch02/c02_exp_2_102'
+r1 = urllib2.urlopen(url)
+b1 = BeautifulSoup(r1, "html.parser")
+#get all content for the website
+#
+# b3 = b1.find_all("form")
+# count = 0
+# a = None
+# for box in b3[0].find_all("textarea"):
+#     #get info from the box
+#     count += 1
+#     a= box.get_text()
+#
+#
+# print a
+#
+
+#print count
+
+
+#for box in b3.find_all("textarea"):
+
 #a = str(b.find_all('form')[0]).replace('/codecheck/check','http://codecheck.it/codecheck/check')
 #print a
+#for box in b.find_all("textarea"):
+ #   print box.get_text()
 
 # print out the entire website in structure tree
-print(b.prettify())
+#print(b.prettify())
 # print paragraph out
-#print(b.p.text)
 
+#print(b1.p.text)
+#print(b1.pre.text)
+a = ""
+a = b1.pre.text
+print a.replace('\n', '<br />')
 #get all paragraph in web
-# comments = b.findAll(text=lambda text:isinstance(text, Comment))
-# [comment.extract() for comment in comments]
-# print b.text
+
 
 #print out the question text
 #print b.pre.text
@@ -44,6 +70,6 @@ print(b.prettify())
 #print secondP
 
 #print out more than 1 form
-# formP = b.find("form", attrs={ "method" : "post" })
-# for i in formP:
-#     print i
+#formP = b.find("form", attrs={ "method" : "post" })
+#for i in formP:
+#    print i

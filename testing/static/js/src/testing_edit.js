@@ -2,18 +2,30 @@
  * Created by hongle on 12/26/15.
  */
 function TestingXBlockEdit(runtime, element) {
-    $('.save-button').bind('click', function() {
+
+    $(element).find('.cancel-button').bind('click', function() {
+        runtime.notify('cancel', {});
+    });
+
+    $(element).find('.save-button').bind('click', function() {
         var data = {
-          'display_name': $('.display_name', element).val(),
-          'href': $('.base-url', element).val()
+            'display_name': $(edit_display_name).context.value,
+            'href':$(edit_href).context.value
         };
+        $('.xblock-editor-error-message', element).html();
+        $('.xblock-editor-error-message', element).css('display', 'none');
         var handlerUrl = runtime.handlerUrl(element, 'studio_submit');
-        $.post(handlerUrl, JSON.stringify(data)).complete(function() {
-          window.location.reload(false);
+        $.post(handlerUrl, JSON.stringify(data)).done(function(response) {
+            if (response.result === 'success') {
+                window.location.reload(false);
+            } else {
+                $('.xblock-editor-error-message', element).html('Error: '+response.message);
+                $('.xblock-editor-error-message', element).css('display', 'block');
+            }
         });
     });
 
-  $('.cancel-button').bind('click', function() {
-        runtime.notify('cancel', {});
-  });
+     $(function ($) {
+        /* Here's where you'd do things on page load. */
+    });
 }
