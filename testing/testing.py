@@ -2,6 +2,7 @@
 
 import pkg_resources
 import requests
+import bs4
 import os
 from xblock.core import XBlock
 from xblock.fields import Scope, List, String
@@ -32,17 +33,32 @@ class TestingXBlock(XBlock):
                           scope=Scope.settings,
                           help="Name of the component in the edx platform")
     # get question text
-    question = b1.p.text + "</br>"
-    question += b1.pre.text.replace('\n', '<br />')
+    #question = b1.p.text + "</br>"
+    #question += b1.pre.text.replace('\n', '<br/>')
+    tag = b1.find('p')
+    data = ''
+    while True:
+        if isinstance(tag, bs4.element.Tag):
+            if tag.name == 'form':
+                break
+            else:
+                data = data + tag.text  # string concatenation
+                tag = tag.nextSibling
+        else:
+            tag = tag.nextSibling
 
     question_text = String(display_name="Display Name",
-                          default=question,
+                          default=data,
                           scope=Scope.settings,
                           help="Name of the component in the edx platform")
 
-    # save box info
+    # Create dictionary to store all parameters with name/value pairs
+    #print dict
+    #[(u'ConverterRunner.java', ''), (u'level', u'check'), (u'Converter.java', ''), (u'repo', u'bj4fp'), (u'ConverterTester.java', ''), (u'problem', u'ch04/c04_exp_4_7')]
+
     b3 = b1.find_all("form")
     box_name = []
+    dictionary = {}
     text_inside_box = None
     for box in b3[0].find_all("textarea"):
         # get info from the box
@@ -51,6 +67,15 @@ class TestingXBlock(XBlock):
         text_inside_box = box.get_text()
         # get name of each function
         box_name.append(box['name'])
+        #dictionary[box["name"]] = box["value"]
+        dictionary[box["name"]] = ''
+
+    #get input type info for POST
+
+    b4 = b1.find_all("input")
+    for i in range(1, len(b4)):
+        dictionary[b4[i]["name"]] = b4[i]["value"]
+
 
     # find all text
     # comments = b1.findAll(text=lambda text:isinstance(text, Comment))
@@ -75,6 +100,7 @@ class TestingXBlock(XBlock):
                     #default = answer_form,
                     scope=Scope.settings,
                     help="website that will be shown in the XBlock")
+
 
     def resource_string(self, path):
         """ Handy helper for getting resources from our kit."""
@@ -107,10 +133,12 @@ class TestingXBlock(XBlock):
         frag.initialize_js('TestingXBlock')
         return frag
 
+    @XBlock.json_handler
     def student_submit(self, data,suffix=''):
         """
         button submit student code to codecheck
         """
+
 
 
 

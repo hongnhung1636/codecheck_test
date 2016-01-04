@@ -1,11 +1,12 @@
-<h1>${display_name}</h1>
+<h1 id="display-name">${display_name}</h1>
 
-<div class="xblock-question" id="content-main">${question_text}</div>
+<p class="xblock-question" id="content-main">${question_text}</p>
 <ul>
-%for name in range(0,count):
-    <p>${content[name]}</p>
-    <textarea class="answer editable" cols="66" rows="22" name=${content[name]}>${box_text}</textarea>
-%endfor
+    %for name in range(0,count):
+    <p id=${content[name]}>${content[name]}</p>
+    <textarea class="answer editable" cols="66" rows="22" id=${box_text}>${box_text}</textarea>
+
+    %endfor
 </ul>
 <div class="xblock-actions" style="margin-top:20px;height:30px;">
         <span class="error-message"></span>
@@ -13,4 +14,7 @@
                 <a href="#" class="send-button" style="float:left;">Send</a>
             </div>
 </div>
+
+
+
 </object>
